@@ -276,21 +276,20 @@ local function get_basic_item_info(item, include_extended_stats)
         return basic
     end
 
-    local function safe_get(func, default)
-        default = default or 0
-        local success, result = pcall(func)
-        if success and result ~= nil then
-            return result
-        end
-        return default
-    end
-
+    -- Essential info (always collected)
     basic.name = item.Name() or ""
     basic.id = item.ID() or 0
     basic.icon = item.Icon() or 0
-    basic.itemlink = item.ItemLink("CLICKABLE")() or ""
-    basic.nodrop = item.NoDrop() and 1 or 0
     basic.qty = item.Stack() or 1
+    basic.nodrop = item.NoDrop() and 1 or 0
+
+    if M.config.statsLoadingMode == "minimal" then
+        -- In minimal mode, only return essential info
+        return basic
+    end
+
+    -- Standard info (collected in selective or full mode)
+    basic.itemlink = item.ItemLink("CLICKABLE")() or ""
     
     local augments = scan_augment_links(item)
     for k, v in pairs(augments) do 

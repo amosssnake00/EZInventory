@@ -282,6 +282,7 @@ local function get_basic_item_info(item, include_extended_stats)
     basic.icon = item.Icon() or 0
     basic.qty = item.Stack() or 1
     basic.nodrop = item.NoDrop() and 1 or 0
+    basic.tradeskills = item.Tradeskills() and 1 or 0
 
     if M.config.statsLoadingMode == "minimal" then
         -- In minimal mode, only return essential info
